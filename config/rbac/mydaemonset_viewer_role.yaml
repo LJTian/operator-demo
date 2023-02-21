@@ -1,0 +1,27 @@
+# permissions for end users to view mydaemonsets.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: mydaemonset-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: operator-demo
+    app.kubernetes.io/part-of: operator-demo
+    app.kubernetes.io/managed-by: kustomize
+  name: mydaemonset-viewer-role
+rules:
+- apiGroups:
+  - apps.ljtian.com
+  resources:
+  - mydaemonsets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps.ljtian.com
+  resources:
+  - mydaemonsets/status
+  verbs:
+  - get

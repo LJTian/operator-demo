@@ -56,3 +56,27 @@ version: "3"
 ```shell
 kubebuilder create api --group apps --version v1 --kind MyDaemonset
 ```
+交互输入：
+```shell
+Create Resource [y/n] 
+y
+Create Controller [y/n]
+y
+```
+输出内容：
+```shell
+Writing kustomize manifests for you to edit...
+Writing scaffold for you to edit...
+api/v1/mydaemonset_types.go
+controllers/mydaemonset_controller.go
+Update dependencies:
+$ go mod tidy
+Running make:
+$ make generate
+mkdir -p /home/ljtian/file/git/operator-demo/bin
+test -s /home/ljtian/file/git/operator-demo/bin/controller-gen && /home/ljtian/file/git/operator-demo/bin/controller-gen --version | grep -q v0.11.1 || \
+GOBIN=/home/ljtian/file/git/operator-demo/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.11.1
+/home/ljtian/file/git/operator-demo/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+Next: implement your new API and generate the manifests (e.g. CRDs,CRs) with:
+$ make manifests
+```

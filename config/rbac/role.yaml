@@ -1,0 +1,33 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - apps.ljtian.com
+  resources:
+  - mydaemonsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.ljtian.com
+  resources:
+  - mydaemonsets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - apps.ljtian.com
+  resources:
+  - mydaemonsets/status
+  verbs:
+  - get
+  - patch
+  - update

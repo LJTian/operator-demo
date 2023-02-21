@@ -71,7 +71,7 @@ func (r *MyDaemonsetReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 					Kind:       "Pod",
 				},
 				ObjectMeta: meta.ObjectMeta{
-					GenerateName: fmt.Sprintf("%s-", n.Name),
+					GenerateName: fmt.Sprintf("%s-", "myds"),
 					Namespace:    myds.Namespace,
 				},
 				Spec: v1.PodSpec{

@@ -5,7 +5,7 @@ kubebuilder 演示demo
 - 1-下载kuberbuilder
 - 2-创建目录
 - 3-初始话项目
-- 4-模型及控制器
+- 4-API模型及控制器
 - 5-添加证书服务器
 - 6-添加webhook
 - 7-打包测试
@@ -52,7 +52,7 @@ version: "3"
 
 ```
 
-## 创建API
+## API模型及控制器
 ```shell
 kubebuilder create api --group apps --version v1 --kind MyDaemonset
 ```
@@ -79,4 +79,42 @@ GOBIN=/home/ljtian/file/git/operator-demo/bin go install sigs.k8s.io/controller-
 /home/ljtian/file/git/operator-demo/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
 Next: implement your new API and generate the manifests (e.g. CRDs,CRs) with:
 $ make manifests
+```
+## 修改API模型及控制器
+API 文件为：api/v1/mydaemonset_types.go
+```go
+// MyDaemonsetSpec defines the desired state of MyDaemonset
+type MyDaemonsetSpec struct {
+	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+	// Important: Run "make" to regenerate code after modifying this file
+
+	// Foo is an example field of MyDaemonset. Edit mydaemonset_types.go to remove/update
+	Image string `json:"image,omitempty"`  // 修改的内容将 foo 字段替换成了 Image
+}
+
+// MyDaemonsetStatus defines the observed state of MyDaemonset
+type MyDaemonsetStatus struct {
+	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
+	// Important: Run "make" to regenerate code after modifying this file
+}
+```
+控制器文件为：controllers/mydaemonset_controller.go
+```go
+// Reconcile is part of the main kubernetes reconciliation loop which aims to
+// move the current state of the cluster closer to the desired state.
+// TODO(user): Modify the Reconcile function to compare the state specified by
+// the MyDaemonset object against the actual cluster state, and then
+// perform operations to make the cluster state reflect the state specified by
+// the user.
+//
+// For more details, check Reconcile and its Result here:
+// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.14.1/pkg/reconcile
+func (r *MyDaemonsetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	_ = log.FromContext(ctx)
+
+	// TODO(user): your logic here
+	
+
+	return ctrl.Result{}, nil
+}
 ```

@@ -18,6 +18,9 @@ package controllers
 
 import (
 	"context"
+	"fmt"
+	v1 "k8s.io/api/core/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -50,7 +53,42 @@ func (r *MyDaemonsetReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 	_ = log.FromContext(ctx)
 
 	// TODO(user): your logic here
+	myds := &appsv1.MyDaemonset{}
+	if err := r.Client.Get(ctx, req.NamespacedName, myds); err != nil {
+		fmt.Println(err)
+	}
 
+	nl := &v1.NodeList{}
+	if myds.Spec.Image != "" {
+		if err := r.Client.List(ctx, nl); err != nil {
+			fmt.Println(err)
+		}
+
+		for _, n := range nl.Items {
+			p := v1.Pod{
+				TypeMeta: meta.TypeMeta{
+					APIVersion: "v1",
+					Kind:       "Pod",
+				},
+				ObjectMeta: meta.ObjectMeta{
+					GenerateName: fmt.Sprintf("%s-", n.Name),
+					Namespace:    myds.Namespace,
+				},
+				Spec: v1.PodSpec{
+					Containers: []v1.Container{
+						{
+							Image: myds.Spec.Image,
+							Name:  "container",
+						},
+					},
+					NodeName: n.Name,
+				},
+			}
+			if err := r.Client.Create(ctx, &p); err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
 	return ctrl.Result{}, nil
 }
 

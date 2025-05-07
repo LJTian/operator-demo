@@ -7,4 +7,14 @@ layout:
 - go.kubebuilder.io/v4
 projectName: operator-demo
 repo: github.com/ljtian/operator-demo
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: ljtian.com
+  group: cache
+  kind: Memcached
+  path: github.com/ljtian/operator-demo/api/v1alpha1
+  version: v1alpha1
 version: "3"
